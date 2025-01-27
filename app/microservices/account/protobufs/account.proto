@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+enum VoteCategory {
+    NONE = 0;
+    Up = 1;
+    Down = 2;
+}
+
+enum DateCategory {
+    daily = 0;
+    weekly = 1;
+    monthly = 2;
+    yearly = 3;
+}
+
+message Votes {
+    string ccode = 1;
+    VoteCategory vote_type = 2;
+}
+
+/* Requests */
+message getUserRequest {
+    string username = 1;
+    string password = 2;
+}
+message CreateUserRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+    string birth_date = 4;
+    string gender = 5;
+  }
+
+message UpdateUserRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+    string birth_date = 4;
+    string gender = 5;
+}
+
+message UpdateUserRequestFinal {
+    string default_username = 1;
+    UpdateUserRequest body_request = 2;
+}
+
+message deleteUserRequest {
+    string username = 1;
+}
+
+message VoteUserRequest {
+    string ccode = 1;
+    VoteCategory vote_type = 2;
+}
+/*Response */
+message responseUser {
+    string message = 1;
+}
+
+message respGetUser {
+    string username = 1;
+    string email = 2;
+    string birth_date = 3;
+    string gender = 4;
+    repeated Votes vote_history = 5;
+}
+
+
+
+
+
+/* Service */
+service Account {
+    rpc readUser(getUserRequest) returns (respGetUser);
+    rpc createUser(CreateUserRequest) returns (responseUser);
+    rpc updateUser(UpdateUserRequestFinal) returns (responseUser);
+    rpc deleteUser(deleteUserRequest) returns (responseUser);
+    rpc createVote(VoteUserRequest) returns (responseUser);
+}

@@ -1,0 +1,261 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Stockify REST API
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /v1/api
+
+
+definitions:
+  User_sign:
+    type: object
+    required:
+      - username
+    properties:
+      username:
+        type: string
+        description: Username
+  Read_User:
+    type: object
+    required:
+      - username
+      - email
+      - birth_date
+      - gender
+      - votes
+    properties:
+      username:
+        type: string
+        description: Username
+      email:
+        type: string
+        description: Email of user
+      birth_date:
+        type: string
+        description: Birth date of user
+      gender:
+        type: string
+        description: Gender of user
+      votes:
+        type: array
+        items:
+          properties:
+            ccode: 
+              type: string
+            vote_type:
+              type: string
+              enum:
+                - Up
+                - Down 
+
+  User:
+    type: object
+    required:
+      - username
+      - email
+      - password
+      - birth_date
+      - gender
+    properties:
+      username:
+        type: string
+        description: Username
+      password:
+        type: string
+        description: Password
+      email:
+        type: string
+        description: Email of user
+      birth_date:
+        type: string
+        description: Birth date of user
+      gender:
+        type: string
+        description: Gender of user
+  login_User:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        description: Username
+      password:
+        type: string
+        description: Password
+  update_User:
+    type: object
+    properties:
+      username:
+        type: string
+        description: Username
+      password:
+        type: string
+        description: Password
+      email:
+        type: string
+        description: Email of user
+      birth_date:
+        type: string
+        description: Birth date of user
+      gender:
+        type: string
+        description: Gender of user
+        
+  User_Vote:
+    type: object
+    required:
+      - ccode
+      - vote_type
+    properties:
+      username:
+        type: string
+        description: Username 
+      ccode:
+        type: string
+        description: Company Code 
+      vote_type:
+        type: string
+        enum:
+          - Up
+          - Down
+        description: Type of vote
+
+# Paths supported by the server application
+paths:
+  #/login:
+   # get:
+    #  summary: Read user information
+     # operationId: app.app.login
+      #description: Read user information
+      #security: 
+        #- OAuth2: [read_user]
+      #parameters:
+       # - name: login_user
+        #  in: body
+         # description: Information to create user
+          #schema:
+           #   $ref: '#/definitions/login_User'
+      #responses:
+       # '200':
+        #  description: Login successfully
+        #'401':
+         # description: Invalid username or/and password
+  /users/{username}:
+    get:
+      operationId: app.read_user #Vai Mudar
+      summary: Read user information
+      description: Read user information
+      security: 
+        - OAuth2: [read_user]
+      parameters:
+        - name: username
+          in: path
+          description: Get user
+          type: string
+          required: True
+      responses:
+        '200':
+          description: OK
+          schema:
+              $ref: '#/definitions/Read_User'
+        '401':
+          description: Not authenticated
+        '403':
+          description: Access token does not have the required scope
+    put:
+      operationId: app.update_user #Vai Mudar
+      summary: Update user information
+      description: Update user information
+      security: 
+        - OAuth2: [update_user]
+      parameters:
+        - name: username
+          in: path
+          description: Get user
+          type: string
+          required: True
+        - name: request_update
+          in: body
+          description: Information to create user
+          schema:
+            $ref: '#/definitions/update_User'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Not authenticated
+        '403':
+          description: Access token does not have the required scope
+    delete:
+      operationId: app.delete_user #Vai Mudar
+      summary: Delete user information
+      description: Delete user information
+      #security: 
+        #- OAuth2: [delete_user]
+      parameters:
+        - name: username
+          in: path
+          description: Get user
+          type: string
+          required: True
+      responses:
+        '204':
+          description: Deleted Successfully
+        '401':
+          description: Not authenticated
+        '403':
+          description: Access token does not have the required scope
+  /users:
+    post:
+      operationId: app.create_user #Vai Mudar
+      summary: Create user information
+      description: Create user information
+      parameters:
+        - name: request_user
+          in: body
+          description: Information to create user
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '201':
+          description: Successfully created
+    
+  /users/voting:
+    post:
+      operationId: app.create_vote #Vai mudar
+      summary: Create vote if stock of company will increase or decrease
+      description: Create vote if stock of company will increase or decrease
+      security: 
+          - OAuth2: [vote]
+      parameters:
+        - name: req_user_vote
+          in: body
+          description: Information to create user
+          schema:
+            $ref: '#/definitions/User_Vote'
+      responses:
+          '200':
+            description: Vote created
+          '401':
+            description: Not authenticated
+          '403':
+            description: Access token does not have the required scope
+securityDefinitions:
+  OAuth2:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: https://dev-ic19sbcj.us.auth0.com/authorize
+    #tokenUrl: https://dev-ic19sbcj.us.auth0.com/oauth/token
+    x-tokenInfoFunc: app.get_token
+    scopes:
+      read_user: read user information
+      update_user: update user
+      delete_user: delete user
+      vote: create vote
