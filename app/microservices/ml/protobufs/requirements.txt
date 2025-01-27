@@ -1,0 +1,11 @@
+grpc-interceptor >= 0.11.0
+grpcio-tools >= 1.30
+passlib >= 0.0.0
+sqlalchemy >= 0.0.0
+Flask-SQLAlchemy >= 0.0.0
+sqlalchemy_utils >= 0.0.0
+mysql-connector-python >= 0.0.0
+statsmodels >= 0.0.0
+cython >= 0.0.0
+pystan >= 0.0.0
+prophet >= 0.0.0

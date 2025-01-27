@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+
+
+
+
+
+enum DateCategory2 {
+    daily_ = 0;
+    weekly_ = 1;
+    monthly_ = 2;
+    yearly_ = 3;
+}
+
+/* Requests */
+message requestStock{
+    string ccode=1;
+    DateCategory2 date=2;
+    }
+
+message requestDate{
+    DateCategory2 date=1;
+    }
+
+
+/*Response */
+
+message price_hist {
+    float historic_price = 1;
+    string date = 2;
+}
+
+message responseStock{
+    float price=1;
+    float average_price=2;
+    string ccode=3;
+    float max_price=4;
+    float min_price=5;
+    repeated price_hist price_Arr=6;
+}
+
+message infoDate{
+    string ccode=1;
+    string date=2;
+    float current_price=3;
+    float max_price=4;
+    float min_price=5;
+}
+
+message responseDate{
+    repeated infoDate stockDateArr=1;
+}
+
+/* Service */
+service Stocks {
+    rpc getStocksCompany(requestStock) returns (responseStock);
+    rpc getStocksDate(requestDate) returns (responseDate);
+}

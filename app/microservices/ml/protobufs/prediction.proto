@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+/*enum DateCategory {
+    daily = 0;
+    weekly = 1;
+    monthly = 2;
+    anual = 3;
+}*/
+
+message company_stats_cat {
+	string message = 1;
+	string name = 2;
+	float prediction_one_day = 3;
+	float prediction_two_day = 4;
+	float prediction_three_day = 5;
+		
+}
+
+/*message Stats{
+	string ccode = 1;
+	DateCategory date = 2;
+}*/
+
+
+/* Requests */
+message request_pred {
+    string ccode = 1;
+	/*DateCategory date = 2;*/
+}
+
+/*Response */
+message response_pred {
+	repeated company_stats_cat company_stats = 1;
+}
+
+/* Service */
+service Stats_service {
+    /*rpc readStats(getStats) returns (responseStats);*/
+	rpc getPrediction(request_pred) returns (response_pred);
+}

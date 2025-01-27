@@ -1,0 +1,40 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Stockify REST API
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /v1/api
+paths:
+  /prediction/{ccode}:
+    get:
+      operationId: app.get_prediction #Vai mudar
+      summary: Get prediction for a specific company
+      description: Get prediction for a specific company
+      parameters:
+        - name: ccode
+          in: path
+          description: Code of the company
+          type: string
+          required: True
+      responses:
+        '200':
+          description: Successfully predicted
+          schema:
+            type: array
+            items:
+              properties:
+                message:
+                  type: string
+                ccode:
+                  type: string
+                prediction_one_day:
+                  type: number
+                prediction_two_day:
+                  type: number
+                prediction_three_day:
+                  type: number

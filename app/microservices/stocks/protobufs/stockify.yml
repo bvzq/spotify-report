@@ -1,0 +1,90 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Stockify REST API
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /v1/api
+
+
+
+# Paths supported by the server application
+paths:
+  /stock/{ccode}/{date}:
+    get:
+      operationId: app.read_one #Vai mudar
+      summary: Read stock data for one company and date 
+      description: Read stock data for one company and date
+      parameters:
+        - name: ccode
+          in: path
+          description: Code of the company
+          type: string
+          required: True
+        - name: date
+          in: path
+          description: Period of time to retrieve stock
+          type: string
+          enum:
+            - daily
+            - weekly
+            - monthly
+            - anual
+          required: True
+      responses:
+        200:
+          description: Successfully read company from list of companies
+          schema:
+            properties:
+              price:
+                type: number
+              price_variation:
+                type: number
+              ccode:
+                type: string
+              price_Arr:
+                type: array
+                items:
+                  properties:
+                    historic_price:
+                      type: number
+                    date:
+                      type: string
+  /stock/{date}:
+    get:
+      operationId: app.read_date #Vai mudar
+      summary: Read date
+      description: Read date
+      parameters:
+        - name: date
+          in: path
+          description: Period of time to retrieve stock
+          type: string
+          enum:
+            - daily
+            - weekly
+            - monthly
+            - anual
+          required: True
+      responses:
+          200:
+            description: Successfully read company from list of companies
+            schema:
+              type: array
+              items:
+                properties:
+                  ccode:
+                    type: string
+                  date:
+                    type: string
+                  current_price:
+                    type: number
+                  max_price:
+                    type: number
+                  min_price:
+                    type: number
+  
